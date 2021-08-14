@@ -6,34 +6,17 @@ import java.util.Stack;
 
 import util.TreeNode;
 
-public class No0094 {
+public class No00144 {
     public static List<Integer> preorderTraversal(TreeNode root) {
         List<Integer> res = new LinkedList<>();
-        TreeNode cur = root;
         Stack<TreeNode> stack = new Stack<>();
-        while (cur != null || !stack.isEmpty()) {
-            if (cur == null) {
-                cur = stack.pop();
-                res.add(cur.val);
-
-            }
-        }
-        return res;
-    }
-
-    public static List<Integer> inorderTraversal(TreeNode root) {
-        // do it iteratively
-        List<Integer> res = new LinkedList<>();
-        Stack<TreeNode> stack = new Stack<>();
-        TreeNode cur = root;
-        while (cur != null || !stack.isEmpty()) {
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode cur = stack.pop();
             if (cur != null) {
-                stack.push(cur);
-                cur = cur.left;
-            } else {
-                cur = stack.pop();
+                stack.push(cur.right);
+                stack.push(cur.left);
                 res.add(cur.val);
-                cur = cur.right;
             }
         }
         return res;
@@ -55,8 +38,8 @@ public class No0094 {
         TreeNode Node1 = new TreeNode(1);
         Node1.right = Node2;
         Node2.left = Node3;
-        List<Integer> res = inorderTraversal(Node1);
-        System.out.println("Inorder res:");
+        List<Integer> res = preorderTraversal(Node1);
+        System.out.println("Preorder res:");
         for (Integer item : res) {
             System.out.println(item);
         }

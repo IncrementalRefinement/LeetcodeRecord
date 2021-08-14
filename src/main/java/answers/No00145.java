@@ -6,23 +6,9 @@ import java.util.Stack;
 
 import util.TreeNode;
 
-public class No0094 {
-    public static List<Integer> preorderTraversal(TreeNode root) {
-        List<Integer> res = new LinkedList<>();
-        TreeNode cur = root;
-        Stack<TreeNode> stack = new Stack<>();
-        while (cur != null || !stack.isEmpty()) {
-            if (cur == null) {
-                cur = stack.pop();
-                res.add(cur.val);
-
-            }
-        }
-        return res;
-    }
-
-    public static List<Integer> inorderTraversal(TreeNode root) {
-        // do it iteratively
+public class No00145 {
+    public static List<Integer> postorderTraversal(TreeNode root) {
+        // TODO: fix endless issue
         List<Integer> res = new LinkedList<>();
         Stack<TreeNode> stack = new Stack<>();
         TreeNode cur = root;
@@ -31,9 +17,14 @@ public class No0094 {
                 stack.push(cur);
                 cur = cur.left;
             } else {
-                cur = stack.pop();
-                res.add(cur.val);
-                cur = cur.right;
+                cur = stack.peek();
+                if (cur.right != null) {
+                    cur = cur.right;
+                } else {
+                    res.add(cur.val);
+                    stack.pop();
+                    cur = null;
+                }
             }
         }
         return res;
@@ -55,8 +46,8 @@ public class No0094 {
         TreeNode Node1 = new TreeNode(1);
         Node1.right = Node2;
         Node2.left = Node3;
-        List<Integer> res = inorderTraversal(Node1);
-        System.out.println("Inorder res:");
+        List<Integer> res = postorderTraversal(Node1);
+        System.out.println("Postorder res:");
         for (Integer item : res) {
             System.out.println(item);
         }

@@ -6,7 +6,7 @@ import java.util.Stack;
 
 import util.TreeNode;
 
-public class No0094 {
+public class No00094 {
     public static List<Integer> preorderTraversal(TreeNode root) {
         List<Integer> res = new LinkedList<>();
         TreeNode cur = root;

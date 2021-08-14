@@ -8,21 +8,21 @@ import util.TreeNode;
 
 public class No00145 {
     public static List<Integer> postorderTraversal(TreeNode root) {
-        // TODO: fix endless issue
         List<Integer> res = new LinkedList<>();
         Stack<TreeNode> stack = new Stack<>();
-        TreeNode cur = root;
+        TreeNode cur = root, prev = null;
         while (cur != null || !stack.isEmpty()) {
             if (cur != null) {
                 stack.push(cur);
                 cur = cur.left;
             } else {
                 cur = stack.peek();
-                if (cur.right != null) {
+                if (cur.right != null && cur.right != prev) {
                     cur = cur.right;
                 } else {
                     res.add(cur.val);
                     stack.pop();
+                    prev = cur;
                     cur = null;
                 }
             }

@@ -3,7 +3,7 @@ package answers;
 import java.util.LinkedList;
 import java.util.List;
 
-public class No0022 {
+public class No00022 {
     public static List<String> generateParenthesis(int n) {
         LinkedList<String> res  = new LinkedList<>();
         StringBuffer sb = new StringBuffer();

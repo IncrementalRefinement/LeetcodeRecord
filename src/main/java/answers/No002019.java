@@ -6,25 +6,28 @@ public class No002019 {
 
     private final static int TRUE_ANSWER_SCORE = 5;
     private final static int PARTIAL_TRUE_ANSWER_SCORE = 2;
-    private static HashMap<String, Set<Integer>> cache;
+    private static Set<Integer>[][] cache;
 
     public static int scoreOfStudents(String s, int[] answers) {
-        cache = new HashMap<>();
         if (answers == null || s == null)  return 0;
 
-        int[] res = new int[answers.length];
+        // TODO: how Java generic works?
+        // cache = (Set<Integer>[][]) new Object[s.length() / 2 + 1][s.length() / 2 + 1];
+         cache = new Set[s.length() / 2 + 1][s.length() / 2 + 1];
+        int res = 0;
         int trueResult = calcTrueResult(s);
         Set<Integer> possibleResults = calcPossibleResult(s);
 
-        for (int i = 0; i < answers.length; i++) {
-            if (answers[i] == trueResult) {
-                res[i] = TRUE_ANSWER_SCORE;
-            } else if (possibleResults.contains(answers[i])) {
-                res[i] = PARTIAL_TRUE_ANSWER_SCORE;
+        for (int answer : answers) {
+            if (answer == trueResult) {
+                res += TRUE_ANSWER_SCORE;
+            } else if (possibleResults.contains(answer)) {
+                res += PARTIAL_TRUE_ANSWER_SCORE;
             }
         }
+
         cache = null;
-        return Arrays.stream(res).sum();
+        return res;
     }
 
     private static int calcTrueResult(String s) {
@@ -54,46 +57,45 @@ public class No002019 {
     }
 
     private static Set<Integer> calcPossibleResult(String s) {
-
-        if (cache != null && cache.get(s) != null) {
-            return cache.get(s);
-        }
-
-        Set<Integer> possibleResults = new HashSet<>();
+        Set<Integer> possibleResults;
         Set<Integer> possibleLeftResults;
         Set<Integer> possibleRightResults;
 
-        if (s.length() == 1) {
-            possibleResults.add(Integer.valueOf(s));
-            return possibleResults;
+        for (int i = 0; i < cache.length; i++) {
+            cache[i][i] = new HashSet<>();
+            cache[i][i].add(s.charAt(i * 2) - '0');
         }
 
-        for (int i = 0; i < s.length(); i++) {
-            if (isDigit(s.charAt(i))) continue;
-            possibleLeftResults = calcPossibleResult(s.substring(0, i));
-            possibleRightResults = calcPossibleResult(s.substring(i + 1));
-            for (int left : possibleLeftResults) {
-                for (int right : possibleRightResults) {
-                    switch (s.charAt(i)) {
-                        case '+' -> possibleResults.add(left + right);
-                        case '*' -> possibleResults.add(left * right);
-                        default -> {}
+        for (int step = 1; step < cache.length; step++) {
+            for (int begin = 0; begin < cache.length - step; begin++) {
+                int end = begin + step;
+                cache[begin][end] = new HashSet<>();
+                for (int i = begin; i < end; i++) {
+                    possibleLeftResults = cache[begin][i];
+                    possibleRightResults = cache[i + 1][end];
+                    for (int left : possibleLeftResults) {
+                        for (int right : possibleRightResults) {
+                            switch (s.charAt(i * 2 + 1)) {
+                                case '+' -> {if (left + right <= 1000) cache[begin][end].add(left + right);}
+                                case '*' -> {if (left * right <= 1000) cache[begin][end].add(left * right);}
+                                default -> {}
+                            }
+                        }
                     }
                 }
             }
         }
 
-        if (cache != null) cache.put(s, possibleResults);
-
+        possibleResults = cache[0][cache.length - 1];
         return  possibleResults;
     }
 
-    private static boolean isDigit(char theChar) {
-        return theChar >= '0' && theChar <= '9';
-    }
-
     public static void main(String[] args) {
-        int res = scoreOfStudents("0*0+0+0+0*0", new int[] {20, 13, 42});
+        /**
+         * "7+3*1*2"
+         * [20,13,42]
+         */
+        int res = scoreOfStudents("1+2*3+4", new int[] {13, 21, 11, 15});
         System.out.println(res);
     }
 }

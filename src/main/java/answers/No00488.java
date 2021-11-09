@@ -7,50 +7,51 @@ public class No00488 {
     private static Map<String, Integer> memo = new HashMap<>();
 
     public static int findMinStep(String board, String hand) {
-        Map<Character, Integer> handNumMap = new HashMap<>();
-        handNumMap.put('R', 0);
-        handNumMap.put('Y', 0);
-        handNumMap.put('B', 0);
-        handNumMap.put('G', 0);
-        handNumMap.put('W', 0);
-        for (Character theChar : hand.toCharArray()) {
-            handNumMap.put(theChar, handNumMap.get(theChar) + 1);
-        }
-        int totalHandNum = hand.length();
-        int dfsRes = dfs(board, handNumMap, totalHandNum);
-        if (dfsRes != Integer.MAX_VALUE) {
-            return dfsRes;
-        } else {
+        char[] handCharArray = hand.toCharArray();
+        Arrays.sort(handCharArray);
+        hand = String.valueOf(handCharArray);
+        // memo.put(board + '#' + hand, Integer.MAX_VALUE);
+        String key = board + '#' + hand;
+        dfs(board, hand);
+        int ret = memo.get(key);
+        if (ret == Integer.MAX_VALUE) {
             return -1;
+        } else {
+            return memo.get(key);
         }
     }
 
-    private static int dfs(String board, Map<Character, Integer> handNumMap, int totalHandNum) {
-        int res = Integer.MAX_VALUE;
-        board = removeConsecutive(board);
-        if (totalHandNum == 0 && board.length() != 0) {
-            return res;
-        } else if (board.length() == 0) {
-            return 0;
+    private static int dfs(String board, String hand) {
+        if (hand.length() == 0) {
+            return Integer.MAX_VALUE;
         }
-        char[] charArray = board.toCharArray();
-        for (int i = 0; i < charArray.length; i++) {
-            for (char theChar : handNumMap.keySet()) {
-                if (handNumMap.get(theChar) > 0) {
-                    handNumMap.put(theChar, handNumMap.get(theChar) - 1);
-                    int tempRes = dfs(board.substring(0, i) + theChar + board.substring(i), handNumMap, totalHandNum - 1);
-                    if (tempRes != Integer.MAX_VALUE) {
-                        res = Math.min(res, tempRes + 1);
+        int ret;
+        String key = board + '#' + hand;
+        if (memo.containsKey(key)) {
+            return memo.get(key);
+        } else {
+            ret = Integer.MAX_VALUE;
+        }
+        for (int i = 0; i < board.length(); i++) {
+            for (int j = 0; j < hand.length(); j++) {
+                String newBoard = removeConsecutive(board.substring(0, i) + hand.charAt(j) + board.substring(i));
+                if (newBoard.length() == 0) {
+                    memo.put(key, 1);
+                    return 1;
+                } else {
+                    int tempRet =  dfs(newBoard, hand.substring(0, j) + hand.substring(j + 1));
+                    if (tempRet < Integer.MAX_VALUE) {
+                        ret = Math.min(ret, tempRet + 1);
                     }
-                    handNumMap.put(theChar, handNumMap.get(theChar) + 1);
                 }
             }
         }
-        return res;
+        memo.put(key, ret);
+        return ret;
     }
 
     private static String removeConsecutive(String board) {
-        if (board.equals("RRRRRR")) System.out.println("OKK");
+//        if (board.equals("RRRRRR")) System.out.println("OKK");
         int len = board.length();
         for (int i = 0; i < len - 2; i++) {
             for (int j = 1;; j++) {
@@ -68,8 +69,8 @@ public class No00488 {
     }
 
     public static void main(String[] args) {
-        System.out.println(findMinStep("WWRRBBWW", "WRBRW"));   // 2
-        System.out.println(findMinStep("RRWWRRBBRR", "WB"));    // 2
+         System.out.println(findMinStep("WWRRBBWW", "WRBRW"));   // 2
+         System.out.println(findMinStep("RRWWRRBBRR", "WB"));    // 2
         System.out.println(findMinStep("BGGRRYY", "BBYRG"));    // 5
     }
 }

@@ -1,4 +1,4 @@
-package catagory.twosum;
+package catagory.twopointer;
 
 import java.util.Arrays;
 import java.util.LinkedList;

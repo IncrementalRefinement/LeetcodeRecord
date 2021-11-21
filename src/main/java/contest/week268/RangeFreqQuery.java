@@ -3,18 +3,24 @@ package contest.week268;
 import java.util.*;
 
 public class RangeFreqQuery {
-    private Map<Integer, ArrayList<Integer>> theMap;
+    private Map<Integer, ArrayList<Integer>> theMapBefore;
+    private Map<Integer, Integer[]> theMap;
+
 
     public RangeFreqQuery(int[] arr) {
+        theMapBefore = new HashMap<>();
         theMap = new HashMap<>();
         for (int i = 0; i < arr.length; i++) {
-            if (theMap.containsKey(arr[i])) {
-                theMap.get(arr[i]).add(i);
+            if (theMapBefore.containsKey(arr[i])) {
+                theMapBefore.get(arr[i]).add(i);
             } else {
                 ArrayList<Integer> newList = new ArrayList<>();
                 newList.add(i);
-                theMap.put(arr[i], newList);
+                theMapBefore.put(arr[i], newList);
             }
+        }
+        for (Map.Entry<Integer, ArrayList<Integer>> entry : theMapBefore.entrySet()) {
+            theMap.put(entry.getKey(), entry.getValue().toArray(new Integer[0]));
         }
     }
 
@@ -23,9 +29,7 @@ public class RangeFreqQuery {
             return 0;
         }
         int ret = 0;
-        ArrayList<Integer> indexArrayList = theMap.get(value);
-        // FIXME: I think its mainly because the Array.Copy() takes O(N) time here, the java is really disgusting
-        Integer[] indexArray = indexArrayList.toArray(new Integer[0]);
+        Integer[] indexArray = theMap.get(value);
         int leftIndex = Arrays.binarySearch(indexArray, left);
         if (leftIndex < 0) {
             int IP = -(leftIndex + 1);

@@ -1,4 +1,4 @@
-package catagory.twopointer;
+package category.twopointer;
 
 public class No00026 {
     public static int removeDuplicates(int[] nums) {

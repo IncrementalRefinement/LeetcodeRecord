@@ -1,4 +1,4 @@
-package catagory.twopointer;
+package category.twopointer;
 
 import java.util.Arrays;
 import java.util.LinkedList;

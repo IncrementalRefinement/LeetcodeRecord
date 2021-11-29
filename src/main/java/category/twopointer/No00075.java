@@ -1,4 +1,4 @@
-package catagory.twopointer;
+package category.twopointer;
 
 public class No00075 {
     public static void sortColors(int[] nums) {

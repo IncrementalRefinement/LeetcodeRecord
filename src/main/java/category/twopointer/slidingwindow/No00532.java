@@ -1,4 +1,4 @@
-package catagory.twopointer.slidingwindow;
+package category.twopointer.slidingwindow;
 
 import java.util.HashMap;
 import java.util.Map;

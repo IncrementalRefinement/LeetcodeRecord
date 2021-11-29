@@ -1,4 +1,4 @@
-package catagory.twopointer;
+package category.twopointer;
 
 public class No00088 {
     public static void merge(int[] nums1, int m, int[] nums2, int n) {

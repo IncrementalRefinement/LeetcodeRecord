@@ -1,4 +1,4 @@
-package catagory.twopointer;
+package category.twopointer;
 
 public class No00283 {
     public void moveZeroes(int[] nums) {

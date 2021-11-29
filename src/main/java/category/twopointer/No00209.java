@@ -1,4 +1,4 @@
-package catagory.twopointer;
+package category.twopointer;
 
 public class No00209 {
     public static int minSubArrayLen(int target, int[] nums) {

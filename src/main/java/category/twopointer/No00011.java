@@ -1,4 +1,4 @@
-package catagory.twopointer;
+package category.twopointer;
 
 public class No00011 {
     public static int maxArea(int[] height) {

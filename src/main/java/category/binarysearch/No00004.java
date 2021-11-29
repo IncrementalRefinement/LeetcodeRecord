@@ -1,4 +1,4 @@
-package catagory.binarysearch;
+package category.binarysearch;
 
 public class No00004 {
     public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
